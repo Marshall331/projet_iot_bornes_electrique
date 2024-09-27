@@ -1,0 +1,19 @@
+services:
+  mqtt-broker:
+    image: eclipse-mosquitto
+    container_name: mon_broker_mqtt
+    ports:
+      - "1884:1883"  # MQTT -> hôte:1884
+      - "9002:9001"  # WebSockets -> hôte:9002
+    volumes:
+      - ./mosquitto_config:/mosquitto/config:rw
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:alpine
+    container_name: mon_serveur_nginx
+    ports:
+      - "8080:80"   # HTTP -> hôte:8080
+      - "4443:443"  # HTTPS -> hôte:4443
+    volumes:
+      - ./nginx_html:/usr/share/nginx/html  # Fichiers statiques
