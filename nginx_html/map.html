@@ -1,17 +1,21 @@
 <!doctype html>
 <html lang="fr">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carte des Bornes de Recharge</title>
-    <link rel="stylesheet" href="https://bootswatch.com/5/lux/bootstrap.min.css"/>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ==" crossorigin=""/>
+    <link rel="stylesheet" href="https://bootswatch.com/5/lux/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
+        integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ=="
+        crossorigin="" />
     <style>
         body {
             margin: 0;
         }
 
-        html, body {
+        html,
+        body {
             height: 100%;
             margin: 0;
             padding: 0;
@@ -20,7 +24,8 @@
         #mapid {
             width: 100%;
             height: 100%;
-            margin-top: 56px; /* Laisser de l'espace pour la barre de navigation */
+            margin-top: 56px;
+            /* Laisser de l'espace pour la barre de navigation */
         }
 
         .navbar {
@@ -28,26 +33,32 @@
             top: 0;
             left: 0;
             width: 100%;
-            z-index: 1000; /* Assure que la barre de navigation reste au-dessus de la carte */
+            z-index: 1000;
+            /* Assure que la barre de navigation reste au-dessus de la carte */
         }
 
         .btn-fixed {
             position: fixed;
             top: 10px;
             right: 10px;
-            z-index: 1000; /* Assure que le bouton reste au-dessus des autres éléments */
+            z-index: 1000;
+            /* Assure que le bouton reste au-dessus des autres éléments */
         }
 
         .btn-fixed a {
-            color: inherit; /* Assure que le lien a la même couleur que le bouton */
-            text-decoration: none; /* Enlève le soulignement du lien */
+            color: inherit;
+            /* Assure que le lien a la même couleur que le bouton */
+            text-decoration: none;
+            /* Enlève le soulignement du lien */
         }
 
         .btn-fixed a:hover {
-            text-decoration: none; /* Éviter le soulignement du lien lors du survol */
+            text-decoration: none;
+            /* Éviter le soulignement du lien lors du survol */
         }
     </style>
 </head>
+
 <body>
     <!-- Barre de navigation fixe en haut -->
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -59,79 +70,21 @@
                         <a class="nav-link active" href="map.html">Carte des Bornes </a>
                     </li>
                 </ul>
-                <form class="d-flex" id="searchForm">
-                    <input id="searchInput" class="form-control me-sm-2" type="search" placeholder="Trouver une borne"/>
-                    <button class="btn btn-secondary my-2 my-sm-0" type="submit">Rechercher</button>
-                </form>
+                <input id="searchInput" class="form-control me-sm-2" type="search" placeholder="Trouver une borne" />
             </div>
         </div>
     </nav>
 
-    <!-- Conteneur de la carte -->
     <div id="mapid"></div>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E=" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js" integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log==" crossorigin=""></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E=" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"
+        integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log=="
+        crossorigin=""></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.2/mqttws31.min.js"></script>
+    <script src="map.js"></script>
     <script src="mqtt_wrapper.js"></script>
-    <script>
-        var osmUrl = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-            osmAttrib = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-            osm = L.tileLayer(osmUrl, {maxZoom: 18, attribution: osmAttrib});
-        
-        var mymap = L.map('mapid').setView([43.59998, 1.43333], 13).addLayer(osm);
-
-        var markers = []; // Tableau pour stocker les marqueurs
-        
-        function addMarkers(data) {
-            markers.forEach(marker => marker.remove()); // Supprimer les marqueurs précédents
-            markers = []; // Réinitialiser le tableau des marqueurs
-            
-            data.forEach(function(point) {
-                var latLng = point.geolocalisation ? [point.geolocalisation.lat, point.geolocalisation.lon] : [point.latitude, point.longitude];
-                var marker = L.marker(latLng).addTo(mymap);
-                marker.bindPopup(`
-                    <b>${point.nom_borne}</b><br>
-                    Opérateur de mobilité: ${point.operateur_de_mobilite}<br>
-                    Opérateur: ${point.operateur}<br>
-                    ID de la borne: ${point.id_borne}<br>
-                    Adresse: ${point.numero_rue ? point.numero_rue + ' ' : ''}${point.libelle_voie}, ${point.commune} ${point.code_postal}<br>
-                    Marque: ${point.marque_borne}<br>
-                    Modèle: ${point.modele_borne}<br>
-                    Type de chargement: ${point.type_chargement}<br>
-                    Puissance de la prise: ${point.puissance_prise} kW<br>
-                    Connecteurs disponibles: ${point.connecteur_disponible_prise}<br>
-                    ID de la prise: ${point.id_prise}
-                `);
-                markers.push(marker); // Ajouter le marqueur au tableau
-            });
-        }
-
-        function filterMarkers(searchTerm) {
-            const filteredData = data.results.filter(point => {
-                return point.nom_borne.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                       (point.numero_rue ? point.numero_rue.toLowerCase() : '').includes(searchTerm.toLowerCase()) ||
-                       point.marque_borne.toLowerCase().includes(searchTerm.toLowerCase());
-            });
-            addMarkers(filteredData);
-        }
-
-        // Récupération des données et ajout des marqueurs
-        var data = {}; // Déclaration de la variable globale pour stocker les données
-        
-        fetch('https://data.toulouse-metropole.fr/api/explore/v2.1/catalog/datasets/bornes-recharge-electrique/records?limit=100')
-            .then(response => response.json())
-            .then(fetchedData => {
-                data = fetchedData; // Stockage des données globalement
-                addMarkers(data.results);
-            })
-            .catch(error => console.error('Erreur:', error));
-
-        document.getElementById('searchForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Empêcher le comportement par défaut du formulaire
-            const searchTerm = document.getElementById('searchInput').value;
-            filterMarkers(searchTerm);
-        });
-    </script>
 </body>
+
 </html>
