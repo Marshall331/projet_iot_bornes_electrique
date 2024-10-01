@@ -17,3 +17,15 @@ services:
       - "4443:443"  # HTTPS -> hôte:4443
     volumes:
       - ./nginx_html:/usr/share/nginx/html  # Fichiers statiques
+
+  grafana:
+    image: grafana/grafana
+    container_name: mon_grafana
+    ports:
+      - "3000:3000"  # Grafana -> hôte:3000
+    volumes:
+      - ./grafana_data:/var/lib/grafana  # Persistance des données
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin  # Mot de passe admin par défaut
+    restart: unless-stopped
+
