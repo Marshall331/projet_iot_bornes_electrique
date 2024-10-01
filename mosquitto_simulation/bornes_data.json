@@ -1,0 +1,394 @@
+{
+    "1": {
+        "est_occupee": false
+    },
+    "2": {
+        "est_occupee": false
+    },
+    "3": {
+        "est_occupee": true,
+        "etat_charge": 27,
+        "temps_restant": 58
+    },
+    "4": {
+        "est_occupee": false
+    },
+    "5": {
+        "est_occupee": true,
+        "etat_charge": 23,
+        "temps_restant": 44
+    },
+    "6": {
+        "est_occupee": true,
+        "etat_charge": 56,
+        "temps_restant": 39
+    },
+    "7": {
+        "est_occupee": false
+    },
+    "8": {
+        "est_occupee": true,
+        "etat_charge": 30,
+        "temps_restant": 54
+    },
+    "9": {
+        "est_occupee": true,
+        "etat_charge": 93,
+        "temps_restant": 12
+    },
+    "10": {
+        "est_occupee": false
+    },
+    "11": {
+        "est_occupee": false
+    },
+    "12": {
+        "est_occupee": true,
+        "etat_charge": 11,
+        "temps_restant": 17
+    },
+    "13": {
+        "est_occupee": false
+    },
+    "14": {
+        "est_occupee": false
+    },
+    "15": {
+        "est_occupee": true,
+        "etat_charge": 95,
+        "temps_restant": 43
+    },
+    "16": {
+        "est_occupee": true,
+        "etat_charge": 78,
+        "temps_restant": 35
+    },
+    "17": {
+        "est_occupee": true,
+        "etat_charge": 21,
+        "temps_restant": 14
+    },
+    "18": {
+        "est_occupee": false
+    },
+    "19": {
+        "est_occupee": true,
+        "etat_charge": 48,
+        "temps_restant": 4
+    },
+    "20": {
+        "est_occupee": true,
+        "etat_charge": 82,
+        "temps_restant": 53
+    },
+    "21": {
+        "est_occupee": false
+    },
+    "22": {
+        "est_occupee": false
+    },
+    "23": {
+        "est_occupee": true,
+        "etat_charge": 69,
+        "temps_restant": 9
+    },
+    "24": {
+        "est_occupee": false
+    },
+    "25": {
+        "est_occupee": true,
+        "etat_charge": 77,
+        "temps_restant": 30
+    },
+    "26": {
+        "est_occupee": true,
+        "etat_charge": 92,
+        "temps_restant": 55
+    },
+    "27": {
+        "est_occupee": false
+    },
+    "28": {
+        "est_occupee": true,
+        "etat_charge": 85,
+        "temps_restant": 55
+    },
+    "29": {
+        "est_occupee": false
+    },
+    "30": {
+        "est_occupee": true,
+        "etat_charge": 4,
+        "temps_restant": 56
+    },
+    "31": {
+        "est_occupee": true,
+        "etat_charge": 72,
+        "temps_restant": 28
+    },
+    "32": {
+        "est_occupee": false
+    },
+    "33": {
+        "est_occupee": true,
+        "etat_charge": 27,
+        "temps_restant": 14
+    },
+    "34": {
+        "est_occupee": false
+    },
+    "35": {
+        "est_occupee": false
+    },
+    "36": {
+        "est_occupee": false
+    },
+    "37": {
+        "est_occupee": false
+    },
+    "38": {
+        "est_occupee": false
+    },
+    "39": {
+        "est_occupee": false
+    },
+    "40": {
+        "est_occupee": false
+    },
+    "41": {
+        "est_occupee": true,
+        "etat_charge": 76,
+        "temps_restant": 22
+    },
+    "42": {
+        "est_occupee": false
+    },
+    "43": {
+        "est_occupee": true,
+        "etat_charge": 91,
+        "temps_restant": 58
+    },
+    "44": {
+        "est_occupee": true,
+        "etat_charge": 56,
+        "temps_restant": 15
+    },
+    "45": {
+        "est_occupee": false
+    },
+    "46": {
+        "est_occupee": true,
+        "etat_charge": 55,
+        "temps_restant": 39
+    },
+    "47": {
+        "est_occupee": true,
+        "etat_charge": 90,
+        "temps_restant": 25
+    },
+    "48": {
+        "est_occupee": false
+    },
+    "49": {
+        "est_occupee": false
+    },
+    "50": {
+        "est_occupee": false
+    },
+    "51": {
+        "est_occupee": true,
+        "etat_charge": 31,
+        "temps_restant": 32
+    },
+    "52": {
+        "est_occupee": true,
+        "etat_charge": 5,
+        "temps_restant": 58
+    },
+    "53": {
+        "est_occupee": true,
+        "etat_charge": 23,
+        "temps_restant": 36
+    },
+    "54": {
+        "est_occupee": true,
+        "etat_charge": 3,
+        "temps_restant": 47
+    },
+    "55": {
+        "est_occupee": true,
+        "etat_charge": 52,
+        "temps_restant": 7
+    },
+    "56": {
+        "est_occupee": false
+    },
+    "57": {
+        "est_occupee": true,
+        "etat_charge": 86,
+        "temps_restant": 37
+    },
+    "58": {
+        "est_occupee": true,
+        "etat_charge": 27,
+        "temps_restant": 41
+    },
+    "59": {
+        "est_occupee": false
+    },
+    "60": {
+        "est_occupee": false
+    },
+    "61": {
+        "est_occupee": true,
+        "etat_charge": 51,
+        "temps_restant": 49
+    },
+    "62": {
+        "est_occupee": true,
+        "etat_charge": 32,
+        "temps_restant": 39
+    },
+    "63": {
+        "est_occupee": false
+    },
+    "64": {
+        "est_occupee": true,
+        "etat_charge": 18,
+        "temps_restant": 20
+    },
+    "65": {
+        "est_occupee": true,
+        "etat_charge": 95,
+        "temps_restant": 20
+    },
+    "66": {
+        "est_occupee": false
+    },
+    "67": {
+        "est_occupee": false
+    },
+    "68": {
+        "est_occupee": false
+    },
+    "69": {
+        "est_occupee": true,
+        "etat_charge": 62,
+        "temps_restant": 21
+    },
+    "70": {
+        "est_occupee": false
+    },
+    "71": {
+        "est_occupee": true,
+        "etat_charge": 6,
+        "temps_restant": 26
+    },
+    "72": {
+        "est_occupee": true,
+        "etat_charge": 11,
+        "temps_restant": 9
+    },
+    "73": {
+        "est_occupee": false
+    },
+    "74": {
+        "est_occupee": true,
+        "etat_charge": 65,
+        "temps_restant": 44
+    },
+    "75": {
+        "est_occupee": false
+    },
+    "76": {
+        "est_occupee": false
+    },
+    "77": {
+        "est_occupee": false
+    },
+    "78": {
+        "est_occupee": true,
+        "etat_charge": 27,
+        "temps_restant": 57
+    },
+    "79": {
+        "est_occupee": false
+    },
+    "80": {
+        "est_occupee": false
+    },
+    "81": {
+        "est_occupee": true,
+        "etat_charge": 21,
+        "temps_restant": 37
+    },
+    "82": {
+        "est_occupee": false
+    },
+    "83": {
+        "est_occupee": true,
+        "etat_charge": 51,
+        "temps_restant": 7
+    },
+    "84": {
+        "est_occupee": false
+    },
+    "85": {
+        "est_occupee": false
+    },
+    "86": {
+        "est_occupee": false
+    },
+    "87": {
+        "est_occupee": false
+    },
+    "88": {
+        "est_occupee": false
+    },
+    "89": {
+        "est_occupee": true,
+        "etat_charge": 37,
+        "temps_restant": 46
+    },
+    "90": {
+        "est_occupee": false
+    },
+    "91": {
+        "est_occupee": true,
+        "etat_charge": 9,
+        "temps_restant": 17
+    },
+    "92": {
+        "est_occupee": true,
+        "etat_charge": 11,
+        "temps_restant": 14
+    },
+    "93": {
+        "est_occupee": false
+    },
+    "94": {
+        "est_occupee": false
+    },
+    "95": {
+        "est_occupee": false
+    },
+    "96": {
+        "est_occupee": true,
+        "etat_charge": 27,
+        "temps_restant": 41
+    },
+    "97": {
+        "est_occupee": false
+    },
+    "98": {
+        "est_occupee": false
+    },
+    "99": {
+        "est_occupee": true,
+        "etat_charge": 6,
+        "temps_restant": 14
+    },
+    "100": {
+        "est_occupee": false
+    }
+}
