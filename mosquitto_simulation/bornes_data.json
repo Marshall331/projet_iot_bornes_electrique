@@ -1,40 +1,36 @@
 {
     "1": {
-        "est_occupee": false
+        "est_occupee": true,
+        "etat_charge": 2,
+        "temps_restant": 8
     },
     "2": {
         "est_occupee": false
     },
     "3": {
         "est_occupee": true,
-        "etat_charge": 27,
-        "temps_restant": 58
+        "etat_charge": 45,
+        "temps_restant": 47
     },
     "4": {
         "est_occupee": false
     },
     "5": {
-        "est_occupee": true,
-        "etat_charge": 23,
-        "temps_restant": 44
-    },
-    "6": {
-        "est_occupee": true,
-        "etat_charge": 56,
-        "temps_restant": 39
-    },
-    "7": {
         "est_occupee": false
     },
-    "8": {
+    "6": {
+        "est_occupee": false
+    },
+    "7": {
         "est_occupee": true,
-        "etat_charge": 30,
-        "temps_restant": 54
+        "etat_charge": 5,
+        "temps_restant": 30
+    },
+    "8": {
+        "est_occupee": false
     },
     "9": {
-        "est_occupee": true,
-        "etat_charge": 93,
-        "temps_restant": 12
+        "est_occupee": false
     },
     "10": {
         "est_occupee": false
@@ -43,99 +39,91 @@
         "est_occupee": false
     },
     "12": {
-        "est_occupee": true,
-        "etat_charge": 11,
-        "temps_restant": 17
+        "est_occupee": false
     },
     "13": {
-        "est_occupee": false
+        "est_occupee": true,
+        "etat_charge": 30,
+        "temps_restant": 8
     },
     "14": {
-        "est_occupee": false
+        "est_occupee": true,
+        "etat_charge": 0,
+        "temps_restant": 51
     },
     "15": {
         "est_occupee": true,
-        "etat_charge": 95,
-        "temps_restant": 43
+        "etat_charge": 42,
+        "temps_restant": 24
     },
     "16": {
-        "est_occupee": true,
-        "etat_charge": 78,
-        "temps_restant": 35
+        "est_occupee": false
     },
     "17": {
-        "est_occupee": true,
-        "etat_charge": 21,
-        "temps_restant": 14
+        "est_occupee": false
     },
     "18": {
         "est_occupee": false
     },
     "19": {
-        "est_occupee": true,
-        "etat_charge": 48,
-        "temps_restant": 4
+        "est_occupee": false
     },
     "20": {
         "est_occupee": true,
-        "etat_charge": 82,
-        "temps_restant": 53
+        "etat_charge": 87,
+        "temps_restant": 10
     },
     "21": {
-        "est_occupee": false
+        "est_occupee": true,
+        "etat_charge": 26,
+        "temps_restant": 47
     },
     "22": {
         "est_occupee": false
     },
     "23": {
-        "est_occupee": true,
-        "etat_charge": 69,
-        "temps_restant": 9
+        "est_occupee": false
     },
     "24": {
-        "est_occupee": false
+        "est_occupee": true,
+        "etat_charge": 69,
+        "temps_restant": 15
     },
     "25": {
         "est_occupee": true,
-        "etat_charge": 77,
-        "temps_restant": 30
+        "etat_charge": 55,
+        "temps_restant": 34
     },
     "26": {
-        "est_occupee": true,
-        "etat_charge": 92,
-        "temps_restant": 55
+        "est_occupee": false
     },
     "27": {
         "est_occupee": false
     },
     "28": {
-        "est_occupee": true,
-        "etat_charge": 85,
-        "temps_restant": 55
+        "est_occupee": false
     },
     "29": {
         "est_occupee": false
     },
     "30": {
-        "est_occupee": true,
-        "etat_charge": 4,
-        "temps_restant": 56
+        "est_occupee": false
     },
     "31": {
-        "est_occupee": true,
-        "etat_charge": 72,
-        "temps_restant": 28
+        "est_occupee": false
     },
     "32": {
-        "est_occupee": false
+        "est_occupee": true,
+        "etat_charge": 57,
+        "temps_restant": 16
     },
     "33": {
-        "est_occupee": true,
-        "etat_charge": 27,
-        "temps_restant": 14
+        "est_occupee": false
     },
     "34": {
-        "est_occupee": false
+        "est_occupee": true,
+        "etat_charge": 62,
+        "temps_restant": 30
     },
     "35": {
         "est_occupee": false
@@ -144,123 +132,125 @@
         "est_occupee": false
     },
     "37": {
-        "est_occupee": false
+        "est_occupee": true,
+        "etat_charge": 53,
+        "temps_restant": 13
     },
     "38": {
         "est_occupee": false
     },
     "39": {
-        "est_occupee": false
+        "est_occupee": true,
+        "etat_charge": 92,
+        "temps_restant": 39
     },
     "40": {
-        "est_occupee": false
+        "est_occupee": true,
+        "etat_charge": 54,
+        "temps_restant": 40
     },
     "41": {
-        "est_occupee": true,
-        "etat_charge": 76,
-        "temps_restant": 22
+        "est_occupee": false
     },
     "42": {
-        "est_occupee": false
+        "est_occupee": true,
+        "etat_charge": 54,
+        "temps_restant": 37
     },
     "43": {
         "est_occupee": true,
-        "etat_charge": 91,
-        "temps_restant": 58
+        "etat_charge": 41,
+        "temps_restant": 2
     },
     "44": {
-        "est_occupee": true,
-        "etat_charge": 56,
-        "temps_restant": 15
+        "est_occupee": false
     },
     "45": {
         "est_occupee": false
     },
     "46": {
-        "est_occupee": true,
-        "etat_charge": 55,
-        "temps_restant": 39
+        "est_occupee": false
     },
     "47": {
-        "est_occupee": true,
-        "etat_charge": 90,
-        "temps_restant": 25
+        "est_occupee": false
     },
     "48": {
-        "est_occupee": false
+        "est_occupee": true,
+        "etat_charge": 28,
+        "temps_restant": 44
     },
     "49": {
-        "est_occupee": false
+        "est_occupee": true,
+        "etat_charge": 25,
+        "temps_restant": 2
     },
     "50": {
         "est_occupee": false
     },
     "51": {
-        "est_occupee": true,
-        "etat_charge": 31,
-        "temps_restant": 32
+        "est_occupee": false
     },
     "52": {
         "est_occupee": true,
-        "etat_charge": 5,
-        "temps_restant": 58
+        "etat_charge": 79,
+        "temps_restant": 59
     },
     "53": {
         "est_occupee": true,
-        "etat_charge": 23,
-        "temps_restant": 36
+        "etat_charge": 53,
+        "temps_restant": 22
     },
     "54": {
         "est_occupee": true,
-        "etat_charge": 3,
-        "temps_restant": 47
+        "etat_charge": 77,
+        "temps_restant": 17
     },
     "55": {
         "est_occupee": true,
-        "etat_charge": 52,
-        "temps_restant": 7
+        "etat_charge": 63,
+        "temps_restant": 3
     },
     "56": {
         "est_occupee": false
     },
     "57": {
-        "est_occupee": true,
-        "etat_charge": 86,
-        "temps_restant": 37
+        "est_occupee": false
     },
     "58": {
-        "est_occupee": true,
-        "etat_charge": 27,
-        "temps_restant": 41
+        "est_occupee": false
     },
     "59": {
-        "est_occupee": false
+        "est_occupee": true,
+        "etat_charge": 56,
+        "temps_restant": 43
     },
     "60": {
-        "est_occupee": false
+        "est_occupee": true,
+        "etat_charge": 11,
+        "temps_restant": 15
     },
     "61": {
         "est_occupee": true,
-        "etat_charge": 51,
-        "temps_restant": 49
+        "etat_charge": 25,
+        "temps_restant": 4
     },
     "62": {
-        "est_occupee": true,
-        "etat_charge": 32,
-        "temps_restant": 39
+        "est_occupee": false
     },
     "63": {
-        "est_occupee": false
+        "est_occupee": true,
+        "etat_charge": 17,
+        "temps_restant": 46
     },
     "64": {
         "est_occupee": true,
-        "etat_charge": 18,
-        "temps_restant": 20
+        "etat_charge": 35,
+        "temps_restant": 14
     },
     "65": {
         "est_occupee": true,
-        "etat_charge": 95,
-        "temps_restant": 20
+        "etat_charge": 25,
+        "temps_restant": 19
     },
     "66": {
         "est_occupee": false
@@ -269,113 +259,129 @@
         "est_occupee": false
     },
     "68": {
-        "est_occupee": false
+        "est_occupee": true,
+        "etat_charge": 13,
+        "temps_restant": 30
     },
     "69": {
-        "est_occupee": true,
-        "etat_charge": 62,
-        "temps_restant": 21
+        "est_occupee": false
     },
     "70": {
-        "est_occupee": false
+        "est_occupee": true,
+        "etat_charge": 21,
+        "temps_restant": 14
     },
     "71": {
         "est_occupee": true,
-        "etat_charge": 6,
-        "temps_restant": 26
+        "etat_charge": 62,
+        "temps_restant": 58
     },
     "72": {
         "est_occupee": true,
-        "etat_charge": 11,
-        "temps_restant": 9
+        "etat_charge": 8,
+        "temps_restant": 51
     },
     "73": {
-        "est_occupee": false
+        "est_occupee": true,
+        "etat_charge": 24,
+        "temps_restant": 55
     },
     "74": {
         "est_occupee": true,
-        "etat_charge": 65,
-        "temps_restant": 44
+        "etat_charge": 79,
+        "temps_restant": 9
     },
     "75": {
         "est_occupee": false
     },
     "76": {
-        "est_occupee": false
+        "est_occupee": true,
+        "etat_charge": 98,
+        "temps_restant": 45
     },
     "77": {
-        "est_occupee": false
+        "est_occupee": true,
+        "etat_charge": 29,
+        "temps_restant": 3
     },
     "78": {
         "est_occupee": true,
-        "etat_charge": 27,
-        "temps_restant": 57
+        "etat_charge": 86,
+        "temps_restant": 42
     },
     "79": {
-        "est_occupee": false
+        "est_occupee": true,
+        "etat_charge": 42,
+        "temps_restant": 48
     },
     "80": {
-        "est_occupee": false
+        "est_occupee": true,
+        "etat_charge": 85,
+        "temps_restant": 40
     },
     "81": {
-        "est_occupee": true,
-        "etat_charge": 21,
-        "temps_restant": 37
+        "est_occupee": false
     },
     "82": {
         "est_occupee": false
     },
     "83": {
-        "est_occupee": true,
-        "etat_charge": 51,
-        "temps_restant": 7
+        "est_occupee": false
     },
     "84": {
         "est_occupee": false
     },
     "85": {
-        "est_occupee": false
+        "est_occupee": true,
+        "etat_charge": 66,
+        "temps_restant": 6
     },
     "86": {
-        "est_occupee": false
+        "est_occupee": true,
+        "etat_charge": 5,
+        "temps_restant": 55
     },
     "87": {
-        "est_occupee": false
+        "est_occupee": true,
+        "etat_charge": 80,
+        "temps_restant": 17
     },
     "88": {
-        "est_occupee": false
+        "est_occupee": true,
+        "etat_charge": 86,
+        "temps_restant": 57
     },
     "89": {
         "est_occupee": true,
-        "etat_charge": 37,
-        "temps_restant": 46
+        "etat_charge": 36,
+        "temps_restant": 34
     },
     "90": {
-        "est_occupee": false
+        "est_occupee": true,
+        "etat_charge": 94,
+        "temps_restant": 50
     },
     "91": {
-        "est_occupee": true,
-        "etat_charge": 9,
-        "temps_restant": 17
+        "est_occupee": false
     },
     "92": {
-        "est_occupee": true,
-        "etat_charge": 11,
-        "temps_restant": 14
+        "est_occupee": false
     },
     "93": {
-        "est_occupee": false
+        "est_occupee": true,
+        "etat_charge": 8,
+        "temps_restant": 47
     },
     "94": {
         "est_occupee": false
     },
     "95": {
-        "est_occupee": false
+        "est_occupee": true,
+        "etat_charge": 85,
+        "temps_restant": 10
     },
     "96": {
-        "est_occupee": true,
-        "etat_charge": 27,
-        "temps_restant": 41
+        "est_occupee": false
     },
     "97": {
         "est_occupee": false
@@ -384,9 +390,7 @@
         "est_occupee": false
     },
     "99": {
-        "est_occupee": true,
-        "etat_charge": 6,
-        "temps_restant": 14
+        "est_occupee": false
     },
     "100": {
         "est_occupee": false

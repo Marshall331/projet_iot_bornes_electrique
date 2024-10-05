@@ -5,22 +5,14 @@ import random
 import os
 
 # Nom du fichier de données
-data_file = "bornes_data.json"
+data_file = "../nginx_html/data/bornes-recharge-electrique.json"
 
-# Chargement des données existantes à partir du fichier
-def load_existing_data():
-    if os.path.exists(data_file):
-        with open(data_file, 'r') as file:
-            return json.load(file)  # Charge le JSON en tant que dictionnaire
-    return {str(i): {} for i in range(1, 101)}  # Initialiser avec 100 bornes vides sous forme de dictionnaire
+# Charger les données du fichier JSON
+with open(data_file, 'r') as file:
+    bornes_data = json.load(file)
 
-# Sauvegarde des données dans le fichier
-def save_data(data):
-    with open(data_file, 'w') as file:
-        json.dump(data, file, indent=4)
-
-# Données des bornes initiales
-bornes_data = load_existing_data()
+# Créer un dictionnaire pour faciliter l'accès aux données des bornes
+bornes_dict = {borne['id_borne']: borne for borne in bornes_data}
 
 # Callback pour la connexion
 def on_connect(client, userdata, flags, rc):
@@ -34,52 +26,51 @@ def on_message(client, userdata, msg):
 # Créer un client MQTT
 client = mqtt.Client()
 client.on_connect = on_connect
-client.on_message = on_message
+# client.on_message = on_message
 
 # Connexion au broker
 client.connect("localhost", 1884, 60)
 
 # Fonction pour générer un état simulé pour chaque borne
-def simulate_borne_state(index):
+def simulate_borne_state(borne):
     est_occupee = random.choice([True, False])
     etat_borne = {"est_occupee": est_occupee}
 
-    if est_occupee:
-        etat_borne["etat_charge"] = random.randint(0, 100)
-        etat_borne["temps_restant"] = random.randint(1, 60)
+    if est_occupee and borne:
+        etat_borne["etat_charge"] = random.randint(0, 100)  # État de charge aléatoire entre 0 et 100
+        puissance = borne["puissance_prise"]  # Récupérer la puissance de la borne
+
+        # Simuler la capacité de la batterie du véhicule
+        capacite_batterie = random.randint(45, 65) 
+
+        # Calculer le temps restant basé sur l'état de charge, la puissance de la borne, et la capacité de la batterie
+        charge_requise = capacite_batterie * (1 - etat_borne["etat_charge"] / 100)  
+        temps_restant_heuristique = (charge_requise / puissance) * 60 
+
+        etat_borne["temps_restant"] = max(0, int(temps_restant_heuristique))  
+
 
     return etat_borne
-
-# Fonction pour publier toutes les données initiales des bornes
-def publish_initial_data(client):
-    for index in range(1, 101):
-        etat_borne = simulate_borne_state(index)
-        bornes_data[str(index)] = etat_borne  # Mettre à jour le dictionnaire
-        client.publish(f"chargesense/bornes/{index}", json.dumps(etat_borne))
-        print(f"Initial data sent for borne {index}: {etat_borne}")
 
 # Fonction pour mettre à jour un sous-ensemble de bornes périodiquement
 def update_bornes_periodically(client, interval):
     while True:
         # Mettre à jour 10 à 15 bornes
-        for _ in range(random.randint(10, 15)):
-            index = random.randint(1, 100)  # Choisir une borne aléatoire
-            etat_borne = simulate_borne_state(index)
-            bornes_data[str(index)] = etat_borne  # Mettre à jour le dictionnaire
-            client.publish(f"chargesense/bornes/{index}", json.dumps(etat_borne))
-            print(f"Updated data sent for borne {index}: {etat_borne}")
-        
-        # Sauvegarder les données mises à jour dans le fichier
-        save_data(bornes_data)
+        for _ in range(random.randint(1, 2)):
+            borne_id = random.choice(list(bornes_dict.keys()))  # Choisir une borne aléatoire par ID
+            borne = bornes_dict[borne_id]
+            etat_borne = simulate_borne_state(borne)
+            client.publish(f"chargesense/bornes/{borne_id}", json.dumps(etat_borne))
+            print(f"Updated data sent for borne {borne_id}: {etat_borne}")
+
         time.sleep(interval)
 
 # Boucle pour recevoir les messages
 client.loop_start()
 
 try:
-    publish_initial_data(client)  # Publier toutes les données initiales
-    update_bornes_periodically(client, 10)  # Mettre à jour toutes les 10 secondes
+    update_bornes_periodically(client, 5)  # Mettre à jour toutes les 10 secondes
 except KeyboardInterrupt:
     print("Process interrupted")
 finally:
-    client.loop_stop()  # Arrêter la boucle lorsque le programme est terminé
+    client.loop_stop()  
