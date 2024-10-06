@@ -57,7 +57,6 @@ function createIcon(color = "black") {
   return url;
 }
 
-// Fonction pour ajouter un seul marqueur sur la carte
 function addMarker(point) {
   var existingMarker = markers.find((m) => m.id_borne === point.id_borne);
   if (existingMarker) {
@@ -71,18 +70,15 @@ function addMarker(point) {
     etat_borne.etat_charge = Math.floor(Math.random() * 101); // État de charge aléatoire entre 0 et 100
 
     const puissance = point.puissance_prise;
-    // Simuler la capacité de la batterie du véhicule
     const capacite_batterie = Math.floor(Math.random() * (65 - 45 + 1)) + 45; // Capacité entre 45 et 65 kWh
-
-    // Calculer le temps restant basé sur l'état de charge, la puissance de la borne, et la capacité de la batterie
     const charge_requise =
       capacite_batterie * (1 - etat_borne.etat_charge / 100); // en kWh
     const temps_restant_heuristique = (charge_requise / puissance) * 60; // en minutes
-
     etat_borne.temps_restant = Math.max(
       0,
       Math.floor(temps_restant_heuristique)
     );
+    etat_borne.temps_restant_seconds = etat_borne.temps_restant * 60; // Convertir en secondes
   }
 
   var circleColor = "green";
@@ -103,7 +99,6 @@ function addMarker(point) {
 
   const iconUrl = createIcon(circleColor);
 
-  // Création du marqueur
   var marker = L.marker(latLng, {
     icon: L.icon({
       iconUrl: iconUrl,
@@ -117,13 +112,12 @@ function addMarker(point) {
 
   if (est_occupee) {
     popupContent +=
-      "<span style='font-size: 1.3em;'><b>Prochaine borne disponible dans :</b><br>" +
+      "<span id='chrono-" +
+      point.id_borne +
+      "' style='font-size: 1.3em;'><b>Prochaine borne disponible dans :</b><br>" +
       "Temps restant : " +
-      etat_borne.temps_restant +
-      " minutes<br>" +
-      "État de charge de la voiture : " +
-      etat_borne.etat_charge +
-      "%</span><br><br>";
+      formatTime(etat_borne.temps_restant_seconds) +
+      "</span><br><br>";
   }
 
   popupContent +=
@@ -166,11 +160,45 @@ function addMarker(point) {
     "<br></span>";
 
   marker.bindPopup(popupContent);
-  markers.push(marker); // Ajouter le marqueur à la collection
+  markers.push(marker);
+
+  // Si la borne est occupée, démarrer le chrono
+  if (est_occupee) {
+    startChrono(point.id_borne, etat_borne.temps_restant_seconds);
+  }
+}
+
+// Fonction pour formater le temps (en secondes) en format "minutes:secondes"
+function formatTime(seconds) {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  return minutes + "m" + "  " + remainingSeconds + "s";
+}
+
+function startChrono(borneId, initialTime) {
+  let remainingTime = initialTime;
+
+  const intervalId = setInterval(() => {
+    remainingTime--;
+
+    // Mettre à jour l'affichage du temps
+    const chronoElement = document.getElementById("chrono-" + borneId);
+    if (chronoElement) {
+      chronoElement.innerHTML =
+        "<b>Prochaine borne disponible dans :</b><br>Temps restant : " +
+        formatTime(remainingTime);
+    }
+
+    if (remainingTime <= 0) {
+      clearInterval(intervalId);
+      var existingMarker = markers.find((m) => m.id_borne === id_borne);
+      addMarker(existingMarker);
+    }
+  }, 1000); // Mise à jour toutes les secondes
 }
 
 function addMarkers(data) {
-  markers.forEach(marker => mymap.removeLayer(marker));
+  markers.forEach((marker) => mymap.removeLayer(marker));
   markers = [];
 
   data.forEach(function (point) {

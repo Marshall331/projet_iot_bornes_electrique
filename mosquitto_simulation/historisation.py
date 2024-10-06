@@ -1,17 +1,21 @@
 import paho.mqtt.client as mqtt
-from influxdb import InfluxDBClient
 import json
+from influxdb import InfluxDBClient
 
 # Configuration de la base de données InfluxDB
 INFLUXDB_HOST = 'localhost'
 INFLUXDB_PORT = 8086
 INFLUXDB_DB = 'test'
-INFLUXDB_USER = 'test'  
-INFLUXDB_PASSWORD = 'testtest'  
+INFLUXDB_USER = 'test'  # Remplacez par votre nom d'utilisateur
+INFLUXDB_PASSWORD = 'test'  # Remplacez par votre mot de passe
 
 # Créer un client InfluxDB avec authentification
-influx_client = InfluxDBClient(INFLUXDB_HOST, INFLUXDB_PORT, INFLUXDB_USER, INFLUXDB_PASSWORD, database=INFLUXDB_DB)
-
+try:
+    influx_client = InfluxDBClient(INFLUXDB_HOST, INFLUXDB_PORT, INFLUXDB_USER, INFLUXDB_PASSWORD, database=INFLUXDB_DB)
+    print("Connection successful!")
+except Exception as e:
+    print(f"Error connecting to InfluxDB: {e}")
+    
 # Callback pour la connexion
 def on_connect(client, userdata, flags, rc):
     print(f"Connected with result code {rc}")
@@ -33,8 +37,10 @@ def on_message(client, userdata, msg):
     }
 
     # # Insérer les données dans InfluxDB
-    influx_client.write_points([data])
-    # print(f"Inserted data into InfluxDB: {data}")
+    try:
+        influx_client.write_points([data])
+    except Exception as e: 
+        print(e)
 
 # Créer un client MQTT
 client = mqtt.Client()
