@@ -78,7 +78,7 @@ function addMarker(point) {
       0,
       Math.floor(temps_restant_heuristique)
     );
-    etat_borne.temps_restant_seconds = etat_borne.temps_restant * 60; // Convertir en secondes
+    etat_borne.temps_restant_seconds = etat_borne.temps_restant * 60;
   }
 
   var circleColor = "green";
@@ -164,37 +164,44 @@ function addMarker(point) {
 
   // Si la borne est occupée, démarrer le chrono
   if (est_occupee) {
+    etat_borne.temps_restant_seconds = etat_borne.temps_restant * 60; 
     startChrono(point.id_borne, etat_borne.temps_restant_seconds);
   }
 }
 
-// Fonction pour formater le temps (en secondes) en format "minutes:secondes"
+// Fonction qui formatte le temps
 function formatTime(seconds) {
   const minutes = Math.floor(seconds / 60);
   const remainingSeconds = seconds % 60;
   return minutes + "m" + "  " + remainingSeconds + "s";
 }
 
+// Fonction qui démarre le chrono
 function startChrono(borneId, initialTime) {
   let remainingTime = initialTime;
 
-  const intervalId = setInterval(() => {
-    remainingTime--;
+  if (typeof window['chrono_' + borneId] !== 'undefined') {
+    clearInterval(window['chrono_' + borneId]);
+  }
 
-    // Mettre à jour l'affichage du temps
-    const chronoElement = document.getElementById("chrono-" + borneId);
-    if (chronoElement) {
-      chronoElement.innerHTML =
-        "<b>Prochaine borne disponible dans :</b><br>Temps restant : " +
-        formatTime(remainingTime);
+  window['chrono_' + borneId] = setInterval(() => {
+    if (remainingTime > 0) {
+      remainingTime--;
+      const chronoElement = document.getElementById("chrono-" + borneId);
+      if (chronoElement) {
+        chronoElement.innerHTML =
+          "<b>Prochaine borne disponible dans :</b><br>Temps restant : " +
+          formatTime(remainingTime);
+      }
     }
 
     if (remainingTime <= 0) {
-      clearInterval(intervalId);
-      var existingMarker = markers.find((m) => m.id_borne === id_borne);
+      clearInterval(window['chrono_' + borneId]);
+      delete window['chrono_' + borneId];
+      var existingMarker = data.find((m) => m.id_borne === borneId);
       addMarker(existingMarker);
     }
-  }, 1000); // Mise à jour toutes les secondes
+  }, 1000);
 }
 
 function addMarkers(data) {
@@ -248,11 +255,9 @@ client.onConnectionLost = function (responseObject) {
 client.onMessageArrived = function (message) {
   var payload = JSON.parse(message.payloadString);
   var topic = message.destinationName;
-  var borneId = topic.split("/").pop(); // Récupère l'ID de la borne à partir du topic
+  var borneId = topic.split("/").pop();
 
   var borne = data.find((b) => b.id_borne === borneId);
-
-  console.log(borne);
 
   if (borne) {
     var latLng;
