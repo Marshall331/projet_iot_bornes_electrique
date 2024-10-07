@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graphique InfluxDB avec Plotly</title>
+    <!-- Inclure Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <!-- Inclure InfluxDB Client pour JavaScript -->
+    <script src="https://unpkg.com/@influxdata/influxdb-client-browser/dist/index.min.js"></script>
+</head>
+<body>
+    <h1>Graphique des données InfluxDB</h1>
+    <div id="chart"></div> <!-- Div où le graphique sera affiché -->
+
+    <script>
+        const url = "http://localhost:8086"; // URL d'InfluxDB
+        const token = "your-token";          // Votre token InfluxDB
+        const org = "your-org";              // Votre organisation InfluxDB
+        const bucket = "test";               // Nom du bucket
+
+        // Connexion au client InfluxDB
+        const { InfluxDB } = window['@influxdata/influxdb-client'];
+        const queryApi = new InfluxDB({ url, token }).getQueryApi(org);
+
+        // Requête InfluxDB pour récupérer les données
+        const fluxQuery = `
+            from(bucket: "${bucket}")
+            |> range(start: -1d)
+            |> filter(fn: (r) => r._measurement == "my_measurement" and r._field == "temperature")
+        `;
+
+        // Stocker les données récupérées dans un tableau
+        const times = [];
+        const temperatures = [];
+
+        // Exécuter la requête et récupérer les résultats
+        queryApi.queryRows(fluxQuery, {
+            next(row, tableMeta) {
+                const o = tableMeta.toObject(row);
+                times.push(o._time);
+                temperatures.push(o._value);
+            },
+            error(error) {
+                console.error(error);
+                console.log('Erreur lors de la récupération des données InfluxDB');
+            },
+            complete() {
+                console.log('Données récupérées avec succès');
+                // Afficher les données sous forme de graphique avec Plotly
+                plotData(times, temperatures);
+            }
+        });
+
+        // Fonction pour afficher les données sous forme de graphique avec Plotly
+        function plotData(times, temperatures) {
+            const trace = {
+                x: times,
+                y: temperatures,
+                type: 'scatter',
+                mode: 'lines',
+                name: 'Température',
+                line: { color: 'blue' }
+            };
+
+            const layout = {
+                title: 'Température au cours du temps',
+                xaxis: { title: 'Temps' },
+                yaxis: { title: 'Température (°C)' }
+            };
+
+            Plotly.newPlot('chart', [trace], layout);
+        }
+    </script>
+</body>
+</html>

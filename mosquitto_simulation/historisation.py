@@ -3,7 +3,7 @@ from influxdb_client import InfluxDBClient, Point
 
 bucket = "test"
 
-client = InfluxDBClient(url="http://localhost:8086", token="wiYTYCg7nXH7O0v0BVLF99GakmzKvfOsAM45W54Lij8gO5yExwrJpBeYCH-vZmbHw7shvaSwDSAn2WoQxshRIw==", org="test")
+client = InfluxDBClient(url="http://localhost:8086", token="X1jcLw5MLXzppIkCPLgme1Aq0-nGVHa-mCi2Ma7BIqe-oBYw7TWGHZpRiOmbpTY_3vTGVHbM4_5GTZOAc6HfUQ==", org="test")
 
 write_api = client.write_api()
 
@@ -11,6 +11,7 @@ write_api = client.write_api()
 def on_connect(client, userdata, flags, rc):
     print(f"Connected with result code {rc}")
     client.subscribe("#")
+    
     
 # Callback pour les messages reçus
 def on_message(client, userdata, msg):
