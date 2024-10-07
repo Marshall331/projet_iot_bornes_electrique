@@ -1,46 +1,26 @@
 import paho.mqtt.client as mqtt
-import json
-from influxdb import InfluxDBClient
+from influxdb_client import InfluxDBClient, Point
 
-# Configuration de la base de données InfluxDB
-INFLUXDB_HOST = 'localhost'
-INFLUXDB_PORT = 8086
-INFLUXDB_DB = 'test'
-INFLUXDB_USER = 'test'  # Remplacez par votre nom d'utilisateur
-INFLUXDB_PASSWORD = 'test'  # Remplacez par votre mot de passe
+bucket = "test"
 
-# Créer un client InfluxDB avec authentification
-try:
-    influx_client = InfluxDBClient(INFLUXDB_HOST, INFLUXDB_PORT, INFLUXDB_USER, INFLUXDB_PASSWORD, database=INFLUXDB_DB)
-    print("Connection successful!")
-except Exception as e:
-    print(f"Error connecting to InfluxDB: {e}")
-    
+client = InfluxDBClient(url="http://localhost:8086", token="wiYTYCg7nXH7O0v0BVLF99GakmzKvfOsAM45W54Lij8gO5yExwrJpBeYCH-vZmbHw7shvaSwDSAn2WoQxshRIw==", org="test")
+
+write_api = client.write_api()
+
 # Callback pour la connexion
 def on_connect(client, userdata, flags, rc):
     print(f"Connected with result code {rc}")
-    client.subscribe("#")  # S'abonner à tous les sujets
-
+    client.subscribe("#")
+    
 # Callback pour les messages reçus
 def on_message(client, userdata, msg):
     print(f"Received message: {msg.payload.decode()} on topic {msg.topic}")
-
-    # Préparer les données pour l'insertion dans InfluxDB
-    data = {
-        "measurement": "mqtt_messages",
-        "tags": {
-            "topic": msg.topic
-        },
-        "fields": {
-            "message": msg.payload.decode()
-        }
-    }
-
-    # # Insérer les données dans InfluxDB
-    try:
-        influx_client.write_points([data])
-    except Exception as e: 
-        print(e)
+    
+    # Préparer et formater les données pour l'insertion dans InfluxDB
+    point = Point("mqtt_messages").tag("topic", msg.topic).field("message", msg.payload.decode())
+    
+    # Écriture des données dans InfluxDB
+    write_api.write(bucket=bucket, record=point)
 
 # Créer un client MQTT
 client = mqtt.Client()

@@ -3,9 +3,18 @@ var osmUrl = "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   osm = L.tileLayer(osmUrl, { maxZoom: 18, attribution: osmAttrib });
 
-var mymap = L.map("mapid").setView([43.59998, 1.43333], 13).addLayer(osm);
+var mymap = L.map("mapid", { zoomControl: false })
+  .setView([43.59998, 1.43333], 13)
+  .addLayer(osm);
 
-// Ajouter la légende
+// Ajout du zoom en bas à droite de la map
+L.control
+  .zoom({
+    position: "bottomright",
+  })
+  .addTo(mymap);
+
+// Ajout de la légende
 var legend = L.control({ position: "topright" });
 
 legend.onAdd = function (map) {
@@ -20,23 +29,22 @@ legend.onAdd = function (map) {
   div.style.zIndex = "1000";
   div.style.fontSize = "1.5em";
 
-  // Contenu de la légende
+  // Légende
   div.innerHTML =
-    '<h4 class="text-center">Légende</h4>' +
-    '<div><img src="' +
+    '<h4 class="text-center mt-2">Légende</h4>' +
+    '<div class="d-flex align-items-center mt-1"><img src="' +
     createIcon("green") +
     '" style="width:32px; height:32px; margin-right:5px;"/>Bornes libres</div><hr>' +
-    '<h5 class="text-center">Prochaine borne libre dans :</h5>' +
-    '<div><img src="' +
+    '<h5 class="text-center mt-2">Borne libre dans :</h5>' +
+    '<div class="d-flex align-items-center mt-1"><img src="' +
     createIcon("blue") +
-    '" style="width:32px; height:32px; margin-right:5px;"/>Moins de 5 minutes restantes</div>' +
-    '<div><img src="' +
+    '" style="width:32px; height:32px; margin-right:5px;"/>Moins de 5 minutes</div>' +
+    '<div class="d-flex align-items-center mt-1"><img src="' +
     createIcon("orange") +
-    '" style="width:32px; height:32px; margin-right:5px;"/>Entre 15 et 30 minutes restantes</div>' +
-    '<div><img src="' +
-    createIcon("red") +
-    '" style="width:32px; height:32px; margin-right:5px;"/>Plus de 30 minutes restantes</div>';
-
+    '" style="width:32px; height:32px; margin-right:5px;"/>Entre 15 et 30 minutes</div>' +
+    '<div class="d-flex align-items-center mt-1"><img src="' +
+    createIcon("black") +
+    '" style="width:32px; height:32px; margin-right:5px;"/>Plus de 30 minutes</div>';
   return div;
 };
 
@@ -45,7 +53,7 @@ legend.addTo(mymap);
 var markers = [];
 
 // Fonction pour créer l'icône à partir du contenu SVG
-function createIcon(color = "black") {
+function createIcon(color = "green") {
   // Couleur par défaut
   const svgIcon = `
     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 576 512">
@@ -83,7 +91,7 @@ function addMarker(point) {
 
   var circleColor = "green";
   if (etat_borne.temps_restant > 30) {
-    circleColor = "red";
+    circleColor = "black";
   } else if (etat_borne.temps_restant >= 15 && etat_borne.temps_restant <= 30) {
     circleColor = "orange";
   } else if (etat_borne.temps_restant < 15) {
@@ -114,7 +122,7 @@ function addMarker(point) {
     popupContent +=
       "<span id='chrono-" +
       point.id_borne +
-      "' style='font-size: 1.3em;'><b>Prochaine borne disponible dans :</b><br>" +
+      "' style='font-size: 1.3em;'><b>Borne disponible dans :</b><br>" +
       "Temps restant : " +
       formatTime(etat_borne.temps_restant_seconds) +
       "</span><br><br>";
@@ -164,7 +172,7 @@ function addMarker(point) {
 
   // Si la borne est occupée, démarrer le chrono
   if (est_occupee) {
-    etat_borne.temps_restant_seconds = etat_borne.temps_restant * 60; 
+    etat_borne.temps_restant_seconds = etat_borne.temps_restant * 60;
     startChrono(point.id_borne, etat_borne.temps_restant_seconds);
   }
 }
@@ -180,24 +188,24 @@ function formatTime(seconds) {
 function startChrono(borneId, initialTime) {
   let remainingTime = initialTime;
 
-  if (typeof window['chrono_' + borneId] !== 'undefined') {
-    clearInterval(window['chrono_' + borneId]);
+  if (typeof window["chrono_" + borneId] !== "undefined") {
+    clearInterval(window["chrono_" + borneId]);
   }
 
-  window['chrono_' + borneId] = setInterval(() => {
+  window["chrono_" + borneId] = setInterval(() => {
     if (remainingTime > 0) {
       remainingTime--;
       const chronoElement = document.getElementById("chrono-" + borneId);
       if (chronoElement) {
         chronoElement.innerHTML =
-          "<b>Prochaine borne disponible dans :</b><br>Temps restant : " +
+          "<b>Borne disponible dans :</b><br>Temps restant : " +
           formatTime(remainingTime);
       }
     }
 
     if (remainingTime <= 0) {
-      clearInterval(window['chrono_' + borneId]);
-      delete window['chrono_' + borneId];
+      clearInterval(window["chrono_" + borneId]);
+      delete window["chrono_" + borneId];
       var existingMarker = data.find((m) => m.id_borne === borneId);
       addMarker(existingMarker);
     }
@@ -256,6 +264,9 @@ client.onMessageArrived = function (message) {
   var payload = JSON.parse(message.payloadString);
   var topic = message.destinationName;
   var borneId = topic.split("/").pop();
+
+  console.log("Message reçu sur le topic : " + topic);
+  console.log("Contenu (stringifié) : " + JSON.stringify(payload, null, 2));
 
   var borne = data.find((b) => b.id_borne === borneId);
 

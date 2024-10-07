@@ -33,10 +33,13 @@ services:
     image: influxdb:latest
     container_name: mon_influxdb
     ports:
-      - "8086:8086" # InfluxDB -> hôte:8086
+      - "8086:8086"
     environment:
-      INFLUXDB_DB: historisation_db
-      INFLUXDB_HTTP_AUTH_ENABLED: "false"
+      INFLUXDB_DB: db0
+      INFLUXDB_ADMIN_USER: admin
+      INFLUXDB_ADMIN_PASSWORD: test
+      INFLUXDB_HTTP_AUTH_ENABLED: true
+
     volumes:
       - influxdb_data:/var/lib/influxdb
 

@@ -26,7 +26,7 @@ def on_message(client, userdata, msg):
 # Créer un client MQTT
 client = mqtt.Client()
 client.on_connect = on_connect
-# client.on_message = on_message
+client.on_message = on_message
 
 # Connexion au broker
 client.connect("localhost", 1884, 60)
@@ -69,7 +69,7 @@ def update_bornes_periodically(client, interval):
 client.loop_start()
 
 try:
-    update_bornes_periodically(client, 10)  # Mettre à jour toutes les 10 secondes
+    update_bornes_periodically(client, 5)  # Mettre à jour toutes les 10 secondes
 except KeyboardInterrupt:
     print("Process interrupted")
 finally:
