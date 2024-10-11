@@ -1,76 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Graphique InfluxDB avec Plotly</title>
-    <!-- Inclure Plotly.js -->
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <!-- Inclure InfluxDB Client pour JavaScript -->
-    <script src="https://unpkg.com/@influxdata/influxdb-client-browser/dist/index.min.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MQTT WebSocket Example with Leaflet</title>
+    <link rel="stylesheet" href="https://bootswatch.com/5/lux/bootstrap.min.css" />
 </head>
+
 <body>
-    <h1>Graphique des données InfluxDB</h1>
-    <div id="chart"></div> <!-- Div où le graphique sera affiché -->
-
-    <script>
-        const url = "http://localhost:8086"; // URL d'InfluxDB
-        const token = "your-token";          // Votre token InfluxDB
-        const org = "your-org";              // Votre organisation InfluxDB
-        const bucket = "test";               // Nom du bucket
-
-        // Connexion au client InfluxDB
-        const { InfluxDB } = window['@influxdata/influxdb-client'];
-        const queryApi = new InfluxDB({ url, token }).getQueryApi(org);
-
-        // Requête InfluxDB pour récupérer les données
-        const fluxQuery = `
-            from(bucket: "${bucket}")
-            |> range(start: -1d)
-            |> filter(fn: (r) => r._measurement == "my_measurement" and r._field == "temperature")
-        `;
-
-        // Stocker les données récupérées dans un tableau
-        const times = [];
-        const temperatures = [];
-
-        // Exécuter la requête et récupérer les résultats
-        queryApi.queryRows(fluxQuery, {
-            next(row, tableMeta) {
-                const o = tableMeta.toObject(row);
-                times.push(o._time);
-                temperatures.push(o._value);
-            },
-            error(error) {
-                console.error(error);
-                console.log('Erreur lors de la récupération des données InfluxDB');
-            },
-            complete() {
-                console.log('Données récupérées avec succès');
-                // Afficher les données sous forme de graphique avec Plotly
-                plotData(times, temperatures);
-            }
-        });
-
-        // Fonction pour afficher les données sous forme de graphique avec Plotly
-        function plotData(times, temperatures) {
-            const trace = {
-                x: times,
-                y: temperatures,
-                type: 'scatter',
-                mode: 'lines',
-                name: 'Température',
-                line: { color: 'blue' }
-            };
-
-            const layout = {
-                title: 'Température au cours du temps',
-                xaxis: { title: 'Temps' },
-                yaxis: { title: 'Température (°C)' }
-            };
-
-            Plotly.newPlot('chart', [trace], layout);
-        }
-    </script>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">ChargeSmart</a>
+            <div class="collapse navbar-collapse" id="navbarColor04">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="map.html">Carte des Bornes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="stats.html">Statistiques</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container justify-content-center text-center">
+        <h1>Statistiques </h1>
+        <hr>
+    </div>
 </body>
+
 </html>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color: #f4f4f4;
+        padding-top: 160px;
+        /* Ajuste cette valeur selon la hauteur de la navbar */
+    }
+
+    .navbar {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000;
+        background-color: #f8f9fa;
+        /* Optionnel : pour s'assurer qu'elle reste visible */
+    }
+
+    header h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #2c3e50;
+    }
+
+    section {
+        margin-bottom: 30px;
+    }
+
+    h2 {
+        font-size: 24px;
+        margin-bottom: 10px;
+        color: #2980b9;
+        border-bottom: 2px solid #2980b9;
+        padding-bottom: 5px;
+    }
+
+    h3 {
+        font-size: 20px;
+        margin-top: 20px;
+        color: #16a085;
+    }
+
+    p {
+        margin-bottom: 15px;
+        text-align: justify;
+    }
+
+    ul {
+        margin-top: 10px;
+        padding-left: 20px;
+    }
+
+    ul li {
+        margin-bottom: 10px;
+    }
+
+    ul li strong {
+        color: #27ae60;
+    }
+
+    .container {
+        animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+</style>
