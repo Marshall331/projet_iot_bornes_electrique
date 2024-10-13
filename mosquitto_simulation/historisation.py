@@ -4,7 +4,7 @@ from influxdb_client import InfluxDBClient, Point
 
 bucket = "test"
 
-client = InfluxDBClient(url="http://localhost:8086", token="X1jcLw5MLXzppIkCPLgme1Aq0-nGVHa-mCi2Ma7BIqe-oBYw7TWGHZpRiOmbpTY_3vTGVHbM4_5GTZOAc6HfUQ==", org="test")
+client = InfluxDBClient(url="http://localhost:8086", token="dPBhaBP7N2uxSQLuyLfgWZaO7g55kZjl-cxC2Jz__WEn57jqyueRuCYaAroZCmztbOMNfdoTi9Z_j2ZTY-VPIA==", org="test")
 
 write_api = client.write_api()
 

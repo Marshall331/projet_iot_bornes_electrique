@@ -38,7 +38,7 @@ legend.onAdd = function (map) {
     '<h5 class="text-center mt-2">Borne libre dans :</h5>' +
     '<div class="d-flex align-items-center mt-1"><img src="' +
     createIcon("blue") +
-    '" style="width:32px; height:32px; margin-right:5px;"/>Moins de 5 minutes</div>' +
+    '" style="width:32px; height:32px; margin-right:5px;"/>Moins de 15 minutes</div>' +
     '<div class="d-flex align-items-center mt-1"><img src="' +
     createIcon("orange") +
     '" style="width:32px; height:32px; margin-right:5px;"/>Entre 15 et 30 minutes</div>' +
@@ -79,9 +79,13 @@ async function addMarker(point) {
 
     const puissance = point.puissance_prise;
     const capacite_batterie = Math.floor(Math.random() * (65 - 45 + 1)) + 45; // Capacité entre 45 et 65 kWh
-    const charge_requise = capacite_batterie * (1 - etat_borne.etat_charge / 100); // en kWh
+    const charge_requise =
+      capacite_batterie * (1 - etat_borne.etat_charge / 100); // en kWh
     const temps_restant_heuristique = (charge_requise / puissance) * 60; // en minutes
-    etat_borne.temps_restant = Math.max(0, Math.floor(temps_restant_heuristique));
+    etat_borne.temps_restant = Math.max(
+      0,
+      Math.floor(temps_restant_heuristique)
+    );
     etat_borne.temps_restant_seconds = etat_borne.temps_restant * 60;
   }
 
@@ -90,20 +94,6 @@ async function addMarker(point) {
     latLng = [point.geolocalisation.lat, point.geolocalisation.lon];
   } else {
     latLng = [point.latitude, point.longitude];
-  }
-
-  // Récupérer les statistiques de la borne depuis InfluxDB
-  const stats = await fetchBorneStats(point.id_borne);
-  
-  let pourcentageUtilisation = 0;
-  if (stats) {
-    // Exemple d'extraction du pourcentage d'utilisation à partir des données de stats
-    const totalOccupee = stats.total_occuppee || 0; // Ajustez selon votre structure de réponse
-    const totalLibre = stats.total_libre || 0;
-    const totalTemps = totalOccupee + totalLibre;
-    if (totalTemps > 0) {
-      pourcentageUtilisation = (totalOccupee / totalTemps) * 100;
-    }
   }
 
   var circleColor = "green";
@@ -128,6 +118,14 @@ async function addMarker(point) {
 
   var popupContent = "";
 
+  const nombreOccupations = await fetchBorneStats(point.id_borne);
+
+  let nbOccupations =
+    nombreOccupations.length > 2 &&
+    typeof nombreOccupations[1].value === "number"
+      ? Math.floor(nombreOccupations[1].value)
+      : 0;
+
   if (est_occupee) {
     popupContent +=
       "<span id='chrono-" +
@@ -140,6 +138,9 @@ async function addMarker(point) {
 
   popupContent +=
     "<span style='font-size: 1.2em;'><b>" +
+    "Borne utilisé " +
+    nbOccupations +
+    " fois pendant les dernières 24h.<br><br>" +
     point.nom_borne +
     "</b><br>" +
     "Opérateur : " +
@@ -175,9 +176,7 @@ async function addMarker(point) {
     " kW<br>" +
     "Type de connecteurs disponibles: " +
     point.connecteur_disponible_prise +
-    "<br>" +
-    "Pourcentage d'utilisation: " +
-    pourcentageUtilisation.toFixed(2) + "%<br></span>";
+    "<br></span>";
 
   marker.bindPopup(popupContent);
   markers.push(marker);
@@ -317,116 +316,70 @@ function onConnect() {
   });
 }
 
-// Configuration des paramètres InfluxDB
 const INFLUXDB_URL = "http://localhost:8086";
 const INFLUXDB_TOKEN =
-  "X1jcLw5MLXzppIkCPLgme1Aq0-nGVHa-mCi2Ma7BIqe-oBYw7TWGHZpRiOmbpTY_3vTGVHbM4_5GTZOAc6HfUQ=="; // Remplace par ton token
-const INFLUXDB_ORG = "test"; // Nom de ton organisation
-const INFLUXDB_BUCKET = "test"; // Le bucket contenant tes données
+  "dPBhaBP7N2uxSQLuyLfgWZaO7g55kZjl-cxC2Jz__WEn57jqyueRuCYaAroZCmztbOMNfdoTi9Z_j2ZTY-VPIA==";
+const INFLUXDB_ORG = "test";
+const INFLUXDB_BUCKET = "test";
 
-// Requête pour récupérer les données depuis InfluxDB
-async function fetchDataFromInfluxDB() {
+async function fetchBorneStats(borneId) {
   const query = `
-      from(bucket: "test")
-      |> range(start: -1h)
-      |> filter(fn: (r) => r._measurement == "statistiques_borne")
-      |> pivot(rowKey:["_time"], columnKey: ["borne_id"], valueColumn: "_value")`;
-
-  console.log("Requête envoyée:", query); // Log de la requête envoyée
+    from(bucket: "test")
+      |> range(start: -24h) // Récupérer les données des 24 dernières heures
+      |> filter(fn: (r) => r["_measurement"] == "statistiques_borne") // Filtrer par mesure
+      |> filter(fn: (r) => r["borne_id"] == "${borneId}") // Filtrer par borneId
+      |> filter(fn: (r) => r["_field"] == "total_occuppee") // Filtrer par champ total_occuppee
+      |> aggregateWindow(every: 1h, fn: mean, createEmpty: false) // Agréger les données par heure
+      |> yield(name: "mean")
+`;
 
   const url = `${INFLUXDB_URL}/api/v2/query?org=${INFLUXDB_ORG}`;
-  console.log("URL de la requête:", url); // Log de l'URL de la requête
 
-  const response = await fetch(url, {
+  try {
+    const response = await fetch(url, {
       method: "POST",
       headers: {
-          Authorization: "Token X1jcLw5MLXzppIkCPLgme1Aq0-nGVHa-mCi2Ma7BIqe-oBYw7TWGHZpRiOmbpTY_3vTGVHbM4_5GTZOAc6HfUQ==",
-          "Content-Type": "application/vnd.flux",
+        Authorization: `Token ${INFLUXDB_TOKEN}`,
+        "Content-Type": "application/vnd.flux",
       },
       body: query,
-  });
+    });
 
-  console.log("Réponse de la requête:", response); // Log de la réponse
-
-  if (response.ok) {
+    if (response.ok) {
       const data = await response.text();
-      console.log("Données récupérées depuis InfluxDB:", data);
-
-      // Traitement des données pour afficher les stats par borne
-      const parsedData = parseInfluxDBData(data);
-      console.log("Statistiques par borne:", parsedData);
+      const parsedData = parseInfluxResponse(data);
+      // console.log(parsedData);
       return parsedData;
-  } else {
-      const errorText = await response.text(); // Obtenez le texte de l'erreur
+    } else {
+      const errorText = await response.text();
       console.error(
-          "Erreur lors de la récupération des données:",
-          response.statusText,
-          errorText
+        "Erreur lors de la récupération des données:",
+        response.statusText,
+        errorText
       );
+    }
+  } catch (error) {
+    // Gérer les erreurs lors de l'exécution de la requête
+    console.error("Erreur lors de l'exécution de la requête:", error);
   }
 }
 
-// Fonction pour récupérer les statistiques de la borne depuis InfluxDB
-async function fetchBorneStats(borneId) {
-  const query = `from(bucket: "test")
-    |> range(start: -1h)
-    |> filter(fn: (r) => r._measurement == "statistiques_borne" && r.borne_id == "${borneId}")`;
+function parseInfluxResponse(data) {
+  const lines = data.split("\n");
+  const results = [];
 
-  const url = `http://localhost:8086/api/v2/query?org=test`;
+  lines.forEach((line) => {
+    if (!line) return;
 
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      Authorization: "Token X1jcLw5MLXzppIkCPLgme1Aq0-nGVHa-mCi2Ma7BIqe-oBYw7TWGHZpRiOmbpTY_3vTGVHbM4_5GTZOAc6HfUQ==",
-      "Content-Type": "application/vnd.flux",
-    },
-    body: query,
+    const parts = line.split(",");
+
+    if (parts.length >= 7) {
+      const value = parseInt(parts[6]);
+      results.push({
+        value,
+      });
+    }
   });
 
-  if (response.ok) {
-    const data = await response.json(); // ou response.text() selon la structure de la réponse
-    console.log("Statistiques récupérées pour la borne:", data);
-    return data; // Retourne les données récupérées
-  } else {
-    const errorText = await response.text();
-    console.error("Erreur lors de la récupération des statistiques:", errorText);
-    return null;
-  }
+  return results;
 }
-
-// // Fonction pour analyser les données retournées par InfluxDB
-// function parseInfluxDBData(data) {
-//   const rows = data.split('\n').filter(row => row); // Séparer les lignes
-//   const headers = rows[0].split(','); // Obtenir les en-têtes
-//   const statsByBorne = {};
-
-//   for (let i = 1; i < rows.length; i++) {
-//       const values = rows[i].split(',');
-//       const entry = {};
-
-//       headers.forEach((header, index) => {
-//           entry[header.trim()] = values[index].trim();
-//       });
-
-//       const borneId = entry.borne_id; // Remplacez par le nom exact de la colonne si nécessaire
-//       if (!statsByBorne[borneId]) {
-//           statsByBorne[borneId] = {
-//               total_occuppee: 0,
-//               total_libre: 0,
-//               total_charge: 0,
-//               total_temps_restant: 0
-//           };
-//       }
-
-//       statsByBorne[borneId].total_occuppee += parseInt(entry.total_occuppee) || 0; // Assurez-vous que les champs existent
-//       statsByBorne[borneId].total_libre += parseInt(entry.total_libre) || 0;
-//       statsByBorne[borneId].total_charge += parseInt(entry.total_charge) || 0;
-//       statsByBorne[borneId].total_temps_restant += parseInt(entry.total_temps_restant) || 0;
-//   }
-
-//   return statsByBorne;
-// }
-
-// // Appel de la fonction pour récupérer les données
-// fetchDataFromInfluxDB();
-

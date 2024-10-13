@@ -56,7 +56,7 @@ def simulate_borne_state(borne):
 def update_bornes_periodically(client, interval):
     while True:
         # Mettre à jour 10 à 15 bornes
-        for _ in range(random.randint(10, 15)):
+        for _ in range(random.randint(15, 25)):
             borne_id = random.choice(list(bornes_dict.keys()))  # Choisir une borne aléatoire par ID
             borne = bornes_dict[borne_id]
             etat_borne = simulate_borne_state(borne)
@@ -73,4 +73,4 @@ try:
 except KeyboardInterrupt:
     print("Process interrupted")
 finally:
-    client.loop_stop()  
+    client.loop_stop()
