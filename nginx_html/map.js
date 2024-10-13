@@ -118,13 +118,16 @@ async function addMarker(point) {
 
   var popupContent = "";
 
-  const nombreOccupations = await fetchBorneStats(point.id_borne);
+  let nombreOccupations = 0;
 
-  let nbOccupations =
-    nombreOccupations.length > 2 &&
-    typeof nombreOccupations[1].value === "number"
-      ? Math.floor(nombreOccupations[1].value)
-      : 0;
+  // try {
+  //   // nombreOccupations = await fetchBorneStats(point.id_borne);
+  //   nombreOccupations =
+  //     nombreOccupations.length > 2 &&
+  //     typeof nombreOccupations[1].value === "number"
+  //       ? Math.floor(nombreOccupations[1].value)
+  //       : 0;
+  // } catch (error) {}
 
   if (est_occupee) {
     popupContent +=
@@ -139,7 +142,7 @@ async function addMarker(point) {
   popupContent +=
     "<span style='font-size: 1.2em;'><b>" +
     "Borne utilisé " +
-    nbOccupations +
+    nombreOccupations +
     " fois pendant les dernières 24h.<br><br>" +
     point.nom_borne +
     "</b><br>" +
@@ -359,7 +362,6 @@ async function fetchBorneStats(borneId) {
       );
     }
   } catch (error) {
-    // Gérer les erreurs lors de l'exécution de la requête
     console.error("Erreur lors de l'exécution de la requête:", error);
   }
 }
