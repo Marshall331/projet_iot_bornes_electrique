@@ -120,14 +120,18 @@ async function addMarker(point) {
 
   let nombreOccupations = 0;
 
-  // try {
-  //   // nombreOccupations = await fetchBorneStats(point.id_borne);
-  //   nombreOccupations =
-  //     nombreOccupations.length > 2 &&
-  //     typeof nombreOccupations[1].value === "number"
-  //       ? Math.floor(nombreOccupations[1].value)
-  //       : 0;
-  // } catch (error) {}
+  try {
+    nombreOccupations = await fetchBorneStats(point.id_borne);
+    nombreOccupations =
+      nombreOccupations.length > 2 &&
+      typeof nombreOccupations[1].value === "number"
+        ? Math.floor(nombreOccupations[1].value)
+        : 0;
+  } catch (error) {}
+
+  if (!nombreOccupations) {
+    nombreOccupations = 0;
+  }
 
   if (est_occupee) {
     popupContent +=
