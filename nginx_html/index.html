@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MQTT WebSocket Example with Leaflet</title>
+    <link rel="stylesheet" href="https://bootswatch.com/5/lux/bootstrap.min.css" />
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">ChargeSmart</a>
+            <div class="collapse navbar-collapse" id="navbarColor04">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="map.html">Carte des Bornes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="stats.html">Statistiques</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <header>
+            <h1>Présentation de ChargeSense</h1>
+        </header>
+
+        <section class="context">
+            <h2>Mise en contexte</h2>
+
+            <h3>Contexte</h3>
+            <p>
+                Avec la montée en puissance des véhicules électriques (VE), la demande pour des infrastructures de
+                recharge efficaces et bien gérées est en forte croissance. Les villes, comme Toulouse Métropole,
+                cherchent à optimiser l’utilisation de leurs bornes de recharge pour garantir une expérience utilisateur
+                fluide et maximiser l'efficacité des ressources disponibles. Cependant, la gestion des bornes de
+                recharge reste un défi, notamment en termes de suivi en temps réel de l'état des charges et de la
+                libération des bornes.
+            </p>
+
+            <h3>Problématique</h3>
+            <p>
+                Les utilisateurs de VE rencontrent souvent des difficultés pour obtenir des informations précises sur
+                l’état de charge des bornes et le temps restant avant qu’une borne se libère. Cela peut entraîner des
+                temps d'attente inutiles et une utilisation sous-optimale des infrastructures de recharge disponibles.
+                Les gestionnaires de bornes de recharge, quant à eux, ont besoin de solutions pour surveiller l’état de
+                chaque borne, prédire les horaires de libération, et ainsi mieux planifier l’entretien et les mises à
+                jour des infrastructures.
+            </p>
+        </section>
+
+        <section class="product">
+            <h2>Présentation du produit</h2>
+
+            <h3>Description du produit</h3>
+            <p>
+                ChargeSense est un système intelligent de gestion des bornes de recharge électriques qui offre une vue
+                en temps réel sur l’état de chaque borne, optimisant ainsi l’utilisation des infrastructures de
+                recharge. Grâce à une combinaison de capteurs avancés et de technologies de traitement de données,
+                ChargeSense fournit des informations précises sur le temps de charge restant et facilite la gestion
+                dynamique des bornes.
+            </p>
+
+            <h3>Fonctionnalités</h3>
+            <ul>
+                <li><strong>Suivi en temps réel :</strong> capteurs installés sur les bornes de recharge mesurent en
+                    continu l’état de la charge des véhicules. Les données incluent la charge restante en kWh et le
+                    temps estimé avant la fin de la charge.</li>
+                <li><strong>Prédiction de libération :</strong> le système calcule et affiche le temps estimé de
+                    libération de chaque borne, permettant aux utilisateurs de planifier leur utilisation en
+                    conséquence.</li>
+                <li><strong>Interface utilisateur intuitive :</strong> une application web et des tableaux de bord
+                    Grafana offrent une vue claire et interactive des états de charge, des temps de libération, et de
+                    l’occupation des bornes.</li>
+                <li><strong>Historisation des données :</strong> les données collectées sont stockées dans une base de
+                    données InfluxDB, permettant une analyse historique des tendances d’utilisation et des temps de
+                    charge.</li>
+            </ul>
+        </section>
+    </div>
+</body>
+
+</html>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color: #f4f4f4;
+        padding-top: 160px;
+        /* Ajuste cette valeur selon la hauteur de la navbar */
+    }
+
+    .navbar {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000;
+        background-color: #f8f9fa;
+        /* Optionnel : pour s'assurer qu'elle reste visible */
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    header h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #2c3e50;
+    }
+
+    section {
+        margin-bottom: 30px;
+    }
+
+    h2 {
+        font-size: 24px;
+        margin-bottom: 10px;
+        color: #2980b9;
+        border-bottom: 2px solid #2980b9;
+        padding-bottom: 5px;
+    }
+
+    h3 {
+        font-size: 20px;
+        margin-top: 20px;
+        color: #16a085;
+    }
+
+    p {
+        margin-bottom: 15px;
+        text-align: justify;
+    }
+
+    ul {
+        margin-top: 10px;
+        padding-left: 20px;
+    }
+
+    ul li {
+        margin-bottom: 10px;
+    }
+
+    ul li strong {
+        color: #27ae60;
+    }
+
+    .container {
+        animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+</style>
